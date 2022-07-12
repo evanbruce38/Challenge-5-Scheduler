@@ -32,7 +32,7 @@ const createEvent = (rowId) => {
         let rowId = savedEvents[index].rowId;
         let eventEl = $("<p>").text(eventText);
 
-        $(".event#" + rowID).append(eventEl);
+        $(".event#" + rowId).append(eventEl);
     });
  };
 
@@ -55,4 +55,42 @@ const createEvent = (rowId) => {
     }
     savedEvents.push(events);
     saveEvent();
+ };
+
+ const eventObjHandler = (updatedVal, rowId) => {
+    events = {
+        eventVal: updatedVal,
+        rowId: rowId
+    }
+ };
+
+ $(".event").on("click", function() {
+    let length = $(this).html().length;
+    let rowId = $(this).attr("id");
+    if(length == 0) {
+        createEvent(rowId);
+    }
+ });
+
+ $(".saveBtn").on("click", function() {
+    let rowId = $(this).siblings()[1].getAttribute("id");
+    saveButton(rowId);
+ });
+
+ loadEvents();
+
+ let today = moment().format('dddd');
+ $("currentDay").text(today);
+ let currentHour = moment().format("HH");
+
+ for(let i = 9; i <= 17; i++) {
+    const events = $("#" + i);
+    const rowId = events.attr("id");
+    if(currentHour > i) { 
+        events.addClass("past");
+    } else if(currentHour == i) {
+        events.addClass("present");
+    } else if(currentHour < i) {
+        events.addClass("future");
+    };
  };
