@@ -10,15 +10,15 @@ const createEvent = (rowId) => {
     $("#" + rowId).append(textAreaEl);
  };
 
- const editEvents = rowId => {
-    let eventEl = $("#" + rowId).children();
+ const editEvent = rowId => {
+    let eventEl = $("#"+rowId).children();
     let eventText = eventEl.text();
     let newEventEl = $("<textarea>").text(eventText);
     eventEl.replaceWith(newEventEl);
+    newEventEl.focus();
  };
 
  const saveEvent = () => {
-
     localStorage.setItem("events", JSON.stringify(savedEvents));
  };
 
@@ -28,11 +28,11 @@ const createEvent = (rowId) => {
         savedEvents = [];
     }
     $.each(savedEvents, function(index) {
-        let eventText = savedEvents[index].eventVal;
+        let eventText =savedEvents[index].eventVal;
         let rowId = savedEvents[index].rowId;
         let eventEl = $("<p>").text(eventText);
 
-        $(".event#" + rowId).append(eventEl);
+        $(".event#"+ rowId).append(eventEl);
     });
  };
 
@@ -47,9 +47,9 @@ const createEvent = (rowId) => {
     if (updatedVal) {
         eventObjHandler(updatedVal, rowId);
 
-        for (i=0, i < savedEvents.length; i++) {
+        for(i=0; i < savedEvents.length; i++) {
             if(savedEvents[i].rowId === rowId) {
-                savedEvents,splice(i, 1);
+                savedEvents.splice(i, 1);
             }
         }
     }
@@ -57,7 +57,7 @@ const createEvent = (rowId) => {
     saveEvent();
  };
 
- const eventObjHandler = (updatedVal, rowId) => {
+ const eventObjHandler = (updatedVal,rowId) => {
     events = {
         eventVal: updatedVal,
         rowId: rowId
@@ -70,6 +70,9 @@ const createEvent = (rowId) => {
     if(length == 0) {
         createEvent(rowId);
     }
+    else {
+        editEvent(rowId);
+    }
  });
 
  $(".saveBtn").on("click", function() {
@@ -80,10 +83,10 @@ const createEvent = (rowId) => {
  loadEvents();
 
  let today = moment().format('dddd');
- $("currentDay").text(today);
+ $("#currentDay").text(today);
  let currentHour = moment().format("HH");
 
- for(let i = 9; i <= 17; i++) {
+ for(let i =9; i <= 17; i++) {
     const events = $("#" + i);
     const rowId = events.attr("id");
     if(currentHour > i) { 
